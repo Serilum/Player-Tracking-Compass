@@ -1,6 +1,6 @@
 package com.natamus.playertrackingcompass.network;
 
-import com.natamus.collective.functions.StringFunctions;
+import com.natamus.collective.functions.MessageFunctions;
 import com.natamus.playertrackingcompass.items.CompassVariables;
 import com.natamus.playertrackingcompass.services.Services;
 import net.minecraft.ChatFormatting;
@@ -35,10 +35,10 @@ public class CompassTrack {
         if (closestplayer != null) {
             targetPos = closestplayer.blockPosition().immutable();
 
-            StringFunctions.sendMessage(serverPlayer, "The compass is pointing at " + closestplayer.getName().getString() + ".", ChatFormatting.YELLOW);
+            MessageFunctions.sendMessage(serverPlayer, "The compass is pointing at " + closestplayer.getName().getString() + ".", ChatFormatting.YELLOW);
         }
         else {
-            StringFunctions.sendMessage(serverPlayer, "Unable to redirect the compass. There are no players around or they're too close.", ChatFormatting.YELLOW);
+            MessageFunctions.sendMessage(serverPlayer, "Unable to redirect the compass. There are no players around or they're too close.", ChatFormatting.YELLOW);
         }
 
         Services.PACKETTOCLIENT.setTrackingTarget(serverPlayer, targetPos);
