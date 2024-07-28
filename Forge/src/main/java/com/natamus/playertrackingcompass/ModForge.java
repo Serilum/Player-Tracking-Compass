@@ -1,6 +1,7 @@
 package com.natamus.playertrackingcompass;
 
 import com.natamus.collective.check.RegisterMod;
+import com.natamus.collective.check.ShouldLoadCheck;
 import com.natamus.playertrackingcompass.forge.events.RegisterCreativeTabEvent;
 import com.natamus.playertrackingcompass.forge.network.NetworkConstants;
 import com.natamus.playertrackingcompass.forge.network.PacketToClientUpdateTarget;
@@ -29,6 +30,10 @@ public class ModForge {
 	);
 	
 	public ModForge() {
+		if (!ShouldLoadCheck.shouldLoad(Reference.MOD_ID)) {
+			return;
+		}
+
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		ITEMS.register(modEventBus);

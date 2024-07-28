@@ -1,6 +1,7 @@
 package com.natamus.playertrackingcompass;
 
 import com.natamus.collective.check.RegisterMod;
+import com.natamus.collective.check.ShouldLoadCheck;
 import com.natamus.playertrackingcompass.fabric.network.PacketToServerRequestTarget;
 import com.natamus.playertrackingcompass.items.CompassVariables;
 import com.natamus.playertrackingcompass.items.TrackingCompassItem;
@@ -17,6 +18,10 @@ public class ModFabric implements ModInitializer {
 	
 	@Override
 	public void onInitialize() {
+		if (!ShouldLoadCheck.shouldLoad(Reference.MOD_ID)) {
+			return;
+		}
+
 		setGlobalConstants();
 		ModCommon.init();
 
