@@ -1,5 +1,5 @@
 <h2>Player Tracking Compass</h2>
-<p><a href="https://github.com/Serilum/Player-Tracking-Compass"><img src="https://serilum.com/assets/data/logo/player-tracking-compass.png"></a></p><h2>Download</h2>
+<p><a href="https://github.com/Serilum/Player-Tracking-Compass"><img src="https://serilum.com/assets/images/logo/player-tracking-compass.png"></a></p><h2>Download</h2>
 <p>You can download Player Tracking Compass on CurseForge and Modrinth:</p><p>&nbsp;&nbsp;CurseForge: &nbsp;&nbsp;<a href="https://curseforge.com/minecraft/mc-mods/player-tracking-compass">https://curseforge.com/minecraft/mc-mods/player-tracking-compass</a><br>&nbsp;&nbsp;Modrinth: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://modrinth.com/mod/player-tracking-compass">https://modrinth.com/mod/player-tracking-compass</a></p>
 <h2>Issue Tracker</h2>
 <p>To keep a better overview of all mods, the issue tracker is located in a separate repository.<br>&nbsp;&nbsp;For issues, ideas, suggestions or anything else, please follow this link:</p>

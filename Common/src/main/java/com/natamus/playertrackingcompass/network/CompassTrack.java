@@ -35,10 +35,10 @@ public class CompassTrack {
         if (closestplayer != null) {
             targetPos = closestplayer.blockPosition().immutable();
 
-            MessageFunctions.sendMessage(serverPlayer, "The compass is pointing at " + closestplayer.getName().getString() + ".", ChatFormatting.YELLOW);
+            MessageFunctions.sendTranslatableMessage(serverPlayer, "collective.playertrackingcompass.message.compasspointing", ChatFormatting.YELLOW, closestplayer.getName().getString());
         }
         else {
-            MessageFunctions.sendMessage(serverPlayer, "Unable to redirect the compass. There are no players around or they're too close.", ChatFormatting.YELLOW);
+            MessageFunctions.sendTranslatableMessage(serverPlayer, "collective.playertrackingcompass.message.unableredirectcompass", ChatFormatting.YELLOW);
         }
 
         Services.PACKETTOCLIENT.setTrackingTarget(serverPlayer, targetPos);

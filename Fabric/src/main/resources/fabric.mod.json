@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "playertrackingcompass",
-  "version": "3.4",
+  "version": "3.5",
 
   "name": "Player Tracking Compass",
   "description": "Adds a Tracking Compass, which tracks the nearest player on right click.",
@@ -23,7 +23,7 @@
     "fabric": "*",
     "minecraft": ">=1.20",
     "java": ">=17",
-    "collective": ">=8.17"
+    "collective": ">=8.25"
   },
 
   "custom": {
@@ -42,15 +42,12 @@
 	  "If you would like to contribute too, check out https://serilum.com/donate.",
 	  " ",
 	  "Membership sponsors:",
-	  " akanealw",
-	  " Alister",
 	  " Andrean Olgo",
 	  " aternosorg",
 	  " Cherriesaurus",
+	  " Linda Jansen",
+	  " Michelle Smith",
 	  " MWS",
-	  " t128",
-	  " Tyler Behl",
-	  " XAgent",
-	  " ตัวตรึง พระนคร"
+	  " Tyler Behl"
   ]
 }
