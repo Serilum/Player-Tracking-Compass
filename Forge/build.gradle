@@ -1,76 +1,70 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' } // mixin
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '[6.0,6.2)', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7.+' // mixin
-    }
-}
 plugins {
+    id 'multiloader-loader'
+    // id 'net.minecraftforge.accesstransformers' version '5.0.1'
+    id 'net.minecraftforge.gradle' version '[7.0.29,8.0)'
+    id 'net.minecraftforge.jarjar' version '0.2.3'
+    // id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
     id 'com.serilum.tether'
 }
-apply plugin: 'java'
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin' // mixin
 
-archivesBaseName = "${mod_name}-forge-${minecraft_version}"
+repositories {
+    maven minecraft.mavenizer
+    maven fg.forgeMaven
+    maven fg.minecraftLibsMaven
+
+    maven { url "https://repo.spongepowered.org/maven" }
+
+    mavenCentral()
+    mavenLocal()
+}
+
+base {
+    archivesName = "${mod_name}-forge-${minecraft_display_version}"
+}
+
+// mixin {
+//    config("${mod_id}.mixins.json")
+//    config("${mod_id}.forge.mixins.json")
+// }
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
 
+    // def at = file('src/main/resources/META-INF/accesstransformer.cfg')
+    // if (at.exists()) {
+    //    accessTransformers = '../../../../Common/src/main/resources/META-INF/accesstransformer.cfg'
+    // }
+
     runs {
-        client {
-            workingDirectory project.file('run')
-            arg "-mixin.config=playertrackingcompass.mixins.json" // mixin
+        configureEach {
+            workingDir.convention layout.projectDirectory.dir('run')
 
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Client'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                modClientRun {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
+            //systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+            systemProperty 'forge.logging.console.level', 'debug'
+
+            systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
+
+            args "-mixin.config=${mod_id}.mixins.json"
         }
 
-        server {
-            workingDirectory project.file('run')
-            arg "-mixin.config=playertrackingcompass.mixins.json" // mixin
-
-            ideaModule "${rootProject.name}.${project.name}.main"
-            taskName 'Server'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                modServerRun {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
+        register('client') {
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
         }
 
-        data {
-            workingDirectory project.file('run')
-            arg "-mixin.config=playertrackingcompass.mixins.json" // mixin
+        register('server') {
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+        }
 
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            taskName 'Data'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                modDataRun {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
+        register('gameTestServer') {
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+        }
+
+        register('data') {
+            workingDir = layout.projectDirectory.dir('run-data')
+
+            args '--mod', mod_id, '--all', '--output', layout.projectDirectory.dir('src/generated/resources'), '--existing', layout.projectDirectory.dir('src/main/resources')
         }
     }
 }
@@ -78,42 +72,51 @@ minecraft {
 sourceSets.main.resources.srcDir 'src/generated/resources'
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor' // mixin
+    implementation minecraft.dependency("net.minecraftforge:forge:${minecraft_version}-${forge_version}")
+    annotationProcessor 'net.minecraftforge:eventbus-validator:7.0-beta.10'
 
-    compileOnly project(":Common")
+    // Forge's hack fix
+    implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 }
 
-mixin { // mixin
-    add sourceSets.main, "playertrackingcompass.refmap.json" // mixin
-    config 'playertrackingcompass.mixins.json' // mixin
-    
-    debug.verbose = true // mixin
-    debug.export = true // mixin
-} // mixin
-
-tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
+sourceSets.each {
+    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+    it.output.resourcesDir = dir
+    it.java.destinationDirectory = dir
 }
 
-processResources {
-    from project(":Common").sourceSets.main.resources
-}
-
-jar.finalizedBy('reobfJar')
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-            artifact jar
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements'].each { variant -> // , 'sourcesElements', 'javadocElements'].each { variant ->
+    configurations.named("$variant") {
+        attributes {
+            attribute(loaderAttribute, 'forge')
         }
     }
-    repositories {
-        maven {
-            url "file://" + System.getenv("local_maven")
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant->
+        configurations.named("$variant") {
+            attributes {
+                attribute(loaderAttribute, 'forge')
+            }
         }
+    }
+}
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    def forgeMixinLevel = "JAVA_17"
+    inputs.property("forgeMixinLevel", forgeMixinLevel)
+    filesMatching("${mod_id}.mixins.json") {
+        filter { line -> line.replaceAll(/"compatibilityLevel": "JAVA_\d+"/, "\"compatibilityLevel\": \"${forgeMixinLevel}\"") }
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+            "MixinConfigs" : "playertrackingcompass.mixins.json" // mixin
+        ])
     }
 }
