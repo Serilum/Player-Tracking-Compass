@@ -4,9 +4,7 @@ import com.serilum.playertrackingcompass.items.CompassVariables;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber
 public class RegisterCreativeTabEvent {
 	@SubscribeEvent
 	public void buildContents(BuildCreativeModeTabContentsEvent e) {

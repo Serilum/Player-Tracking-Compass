@@ -1,0 +1,37 @@
+modLoader="javafml"
+loaderVersion="*"
+license="All Rights Reserved"
+issueTrackerURL="https://github.com/Serilum/.issue-tracker/labels/Mod:%20Player%20Tracking%20Compass"
+logoFile="icon.png"
+
+[[mods]]
+modId="playertrackingcompass"
+version="4.0"
+displayName="Player Tracking Compass"
+displayURL="https://serilum.com/mod/player-tracking-compass"
+authors="Serilum"
+description='''Adds a Tracking Compass, which tracks the nearest player on right click.
+'''
+credits='''Thank you very much to my Membership sponsors for supporting the development of this mod:  
+
+AnyankaT, aternosorg, Cherriesaurus, Linda Jansen, MWS, Tyler Behl   
+
+If you would like to contribute too, check out https://serilum.com/donate Appreciate it! <3   
+'''
+
+[[dependencies.playertrackingcompass]]
+    modId="collective"
+    type="required"
+    versionRange="[8.69,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.playertrackingcompass]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21,1.21.1]"
+    ordering="NONE"
+    side="BOTH"
+
+[[mixins]]
+    config = "playertrackingcompass.mixins.json"
