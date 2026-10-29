@@ -2,7 +2,6 @@ package com.serilum.playertrackingcompass;
 
 import com.natamus.collective.check.RegisterMod;
 import com.natamus.collective.check.ShouldLoadCheck;
-import com.serilum.playertrackingcompass.fabric.network.PacketToServerRequestTarget;
 import com.serilum.playertrackingcompass.items.CompassVariables;
 import com.serilum.playertrackingcompass.items.TrackingCompassItem;
 import com.serilum.playertrackingcompass.util.Reference;
@@ -15,7 +14,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 
 public class ModFabric implements ModInitializer {
-	
+
 	@Override
 	public void onInitialize() {
 		if (!ShouldLoadCheck.shouldLoad(Reference.MOD_ID)) {
@@ -26,7 +25,6 @@ public class ModFabric implements ModInitializer {
 		ModCommon.init();
 
 		registerItems();
-		loadEvents();
 
 		RegisterMod.register(Reference.NAME, Reference.MOD_ID, Reference.VERSION, Reference.ACCEPTED_VERSIONS);
 	}
@@ -37,10 +35,6 @@ public class ModFabric implements ModInitializer {
 
 		Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Reference.MOD_ID, "tracking_compass"), CompassVariables.TRACKING_COMPASS);
 		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.TOOLS_AND_UTILITIES).register(entries -> entries.prepend(CompassVariables.TRACKING_COMPASS));
-	}
-
-	private void loadEvents() {
-		PacketToServerRequestTarget.registerHandle();
 	}
 
 	private static void setGlobalConstants() {
