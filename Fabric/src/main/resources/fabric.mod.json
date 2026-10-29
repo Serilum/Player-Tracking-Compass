@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "playertrackingcompass",
-  "version": "3.6",
+  "version": "4.0",
 
   "name": "Player Tracking Compass",
   "description": "Adds a Tracking Compass, which tracks the nearest player on right click.",
@@ -16,20 +16,23 @@
   "icon": "icon.png",
 
   "environment": "*",
-  "entrypoints": { "main": [ "com.serilum.playertrackingcompass.ModFabric" ], "client": [ "com.serilum.playertrackingcompass.ModFabricClient" ] },
+  "entrypoints": { "main": [ "com.serilum.playertrackingcompass.ModFabric" ], "client": [ "com.serilum.playertrackingcompass.ModFabricClient" ], "modmenu": [ "com.serilum.playertrackingcompass.fabric.config.IntegrateModMenu" ] },
+  "mixins": [
+    "playertrackingcompass.mixins.json"
+  ],
 
   "depends": {
-    "fabricloader": ">=0.12.5",
-    "fabric": "*",
-    "minecraft": ">=1.20",
-    "java": ">=17",
-    "collective": ">=8.40"
+    "fabricloader": ">=0.18.0",
+    "fabric-api": "*",
+    "minecraft": ">=26.3",
+    "java": ">=25",
+    "collective": ">=8.69"
   },
 
   "custom": {
     "modmenu": {
       "links": {
-        "Donate <3" : "https://serilum.com/donate"
+        "❤ Patreon" : "https://link.serilum.com/patreon"
       }
     }
   },
@@ -41,7 +44,6 @@
 	  "If you would like to contribute too, check out https://serilum.com/donate",
 	  " ",
 	  "Membership sponsors:",
-	  " Andrean Olgo",
 	  " AnyankaT",
 	  " aternosorg",
 	  " Cherriesaurus",
